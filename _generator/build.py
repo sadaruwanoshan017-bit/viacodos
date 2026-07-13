@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Via Codos — static site generator. Generates all pages into the project folder."""
 import os
-from data import SERVICES, INDUSTRIES, CASE_STUDIES, INSIGHTS, TEAM, JOBS
+from data import SERVICES, INDUSTRIES, CASE_STUDIES, INSIGHTS, TEAM, JOBS, FEEDBACK
 
 import pathlib
 OUT = str(pathlib.Path(__file__).resolve().parent.parent)  # project root
@@ -73,8 +73,7 @@ WA_LINK = "https://wa.me/94721980060"
 
 # ----------------------------------------------------------------- chrome
 def head(title, desc, p, home=False):
-    three = ('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>\n'
-             '<script src="%sjs/hero3d.js" defer></script>' % p) if home else ""
+    three = ""  # video hero — no Three.js
     fav = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E"
            "%3Crect width='64' height='64' rx='14' fill='%232563EB'/%3E"
            "%3Ctext x='32' y='44' font-family='Arial,sans-serif' font-weight='800' font-size='34' fill='white' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E")
@@ -100,7 +99,7 @@ def mega_link(href, icon, label):
     return '<a href="%s">%s<span>%s</span></a>' % (href, I.get(icon, ""), label)
 
 def header(p, home=False):
-    sv_cols = {"Build": [], "Run & Scale": [], "Talent & Intelligence": []}
+    sv_cols = {"Talent & Products": [], "Custom Development": [], "Run & Scale": []}
     for s in SERVICES:
         sv_cols[s["group"]].append(mega_link(p + "services/" + s["slug"] + ".html", s["icon"], s["name"]))
     ind_links = [mega_link(p + "industries/" + i["slug"] + ".html", i["icon"], i["name"]) for i in INDUSTRIES]
@@ -110,6 +109,7 @@ def header(p, home=False):
         mega_link(p + "why/sri-lanka-advantage.html", "globe", "The Sri Lanka Advantage"),
         mega_link(p + "why/how-we-work.html", "target", "How We Work"),
         mega_link(p + "why/our-promise.html", "check", "Our Promise"),
+        mega_link(p + "why/feedback.html", "message", "Client Feedback"),
     ]
     co_links = [
         mega_link(p + "company/about.html", "building", "About Us"),
@@ -127,8 +127,9 @@ def header(p, home=False):
   </a>
   <button class="nav-burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <nav class="nav" aria-label="Primary">
+   <div class="nav-item"><a class="nav-link" href="%sindex.html">Home</a></div>
    <div class="nav-item has-mega">
-    <button class="nav-link" type="button">Industries %s</button>
+    <button class="nav-link" type="button">Industries</button>
     <div class="mega mega-cols-2">
      <div class="mega-col"><h5>Industries</h5>%s</div>
      <div class="mega-col"><h5>&nbsp;</h5>%s</div>
@@ -136,20 +137,20 @@ def header(p, home=False):
     </div>
    </div>
    <div class="nav-item has-mega">
-    <button class="nav-link" type="button">Services %s</button>
+    <button class="nav-link" type="button">Services</button>
     <div class="mega mega-cols-3">
-     <div class="mega-col"><h5>Build</h5>%s</div>
+     <div class="mega-col"><h5>Talent &amp; Products</h5>%s</div>
+     <div class="mega-col"><h5>Custom Development</h5>%s</div>
      <div class="mega-col"><h5>Run &amp; Scale</h5>%s</div>
-     <div class="mega-col"><h5>Talent &amp; Intelligence</h5>%s</div>
-     <div class="mega-foot">Eleven service lines, one accountable partner. <a href="%sservices/index.html">View all services →</a></div>
+     <div class="mega-foot">Fifteen service lines, one accountable partner. <a href="%sservices/index.html">View all services →</a></div>
     </div>
    </div>
    <div class="nav-item has-mega">
-    <button class="nav-link" type="button">Why Via Codos %s</button>
+    <button class="nav-link" type="button">Why Via Codos</button>
     <div class="mega"><div class="mega-col"><h5>Why Via Codos</h5>%s</div></div>
    </div>
    <div class="nav-item has-mega">
-    <button class="nav-link" type="button">Company %s</button>
+    <button class="nav-link" type="button">Company</button>
     <div class="mega"><div class="mega-col"><h5>Company</h5>%s</div></div>
    </div>
    <div class="nav-item"><a class="nav-link" href="%sinsights/index.html">Insights</a></div>
@@ -157,10 +158,10 @@ def header(p, home=False):
   </nav>
  </div>
 </header>
-""" % (cls, p, I["chev"], "".join(ind_links[:half]), "".join(ind_links[half:]), p,
-       I["chev"], "".join(sv_cols["Build"]), "".join(sv_cols["Run & Scale"]),
-       "".join(sv_cols["Talent & Intelligence"]), p,
-       I["chev"], "".join(why_links), I["chev"], "".join(co_links), p, p, I["arrow"])
+""" % (cls, p, p, "".join(ind_links[:half]), "".join(ind_links[half:]), p,
+       "".join(sv_cols["Talent & Products"]), "".join(sv_cols["Custom Development"]),
+       "".join(sv_cols["Run & Scale"]), p,
+       "".join(why_links), "".join(co_links), p, p, I["arrow"])
 
 def footer(p):
     ind = "".join('<a href="%sindustries/%s.html">%s</a>' % (p, i["slug"], i["name"]) for i in INDUSTRIES)
@@ -190,6 +191,7 @@ def footer(p):
     <a href="%sportfolio/index.html">Portfolio &amp; Case Studies</a>
     <a href="%sinsights/index.html">Insights / Blog</a>
     <a href="%swhy/why-us.html">Why Via Codos</a>
+    <a href="%swhy/feedback.html">Client Feedback</a>
     <a href="%swhy/sri-lanka-advantage.html">The Sri Lanka Advantage</a>
     <a href="%slegal/nda-security.html">NDA &amp; Security Commitment</a>
    </div>
@@ -210,8 +212,26 @@ def footer(p):
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script src="%sjs/main.js" defer></script>
 </body>
-</html>""" % (p, I["pin"], I["phone"], I["mail"], ind, srv, p, p, p, p, p, p, p, p, p, p,
+</html>""" % (p, I["pin"], I["phone"], I["mail"], ind, srv, p, p, p, p, p, p, p, p, p, p, p,
               p, p, p, I["up"], WA_LINK, I["wa"], p)
+
+def video_block(name, poster, video, rel=""):
+    return """<div class="video-wrap reveal">
+   <span class="video-badge">%s — product tour</span>
+   <video controls preload="metadata" playsinline poster="%sassets/%s">
+    <source src="%sassets/%s" type="video/mp4">
+    Your browser does not support the video tag.
+   </video>
+   <div class="video-end" hidden>
+    <h4>Like what you saw?</h4>
+    <p class="ve-sub">Let's talk about building the same operational clarity for your business.</p>
+    <div class="ve-contacts">
+     <a href="%s" target="_blank" rel="noopener">%s +94 721 980 060</a>
+     <a href="mailto:info@viacodos.com">%s info@viacodos.com</a>
+    </div>
+    <button class="ve-replay" type="button">Watch again</button>
+   </div>
+  </div>""" % (name, rel, poster, rel, video, WA_LINK, I["wa"], I["mail"])
 
 def page_hero(p, crumb, tagline, h1, lead=""):
     crumbs = ['<a href="%sindex.html">Home</a>' % p]
@@ -221,15 +241,17 @@ def page_hero(p, crumb, tagline, h1, lead=""):
     crumbs.append(I["chevr"])
     crumbs.append('<span class="cur">%s</span>' % crumb[-1][0])
     lead_html = '<p class="lead reveal" data-delay="2">%s</p>' % lead if lead else ""
+    mark = crumb[0][0].split(" ")[0]
     return """<section class="page-hero">
+ <span class="ph-mark" aria-hidden="true">%s</span>
  <div class="container">
   <nav class="breadcrumb" aria-label="Breadcrumb">%s</nav>
-  <span class="eyebrow reveal">%s</span>
+  <span class="tagline reveal">%s</span>
   <h1 class="reveal" data-delay="1">%s</h1>
   %s
  </div>
 </section>
-""" % ("".join(crumbs), tagline, h1, lead_html)
+""" % (mark, "".join(crumbs), tagline, h1, lead_html)
 
 def cta_band(p, title="Ready to Build Your Dream Team?",
              sub="Get started with a free consultation today. No obligation, just expert advice from people who have done this before.",
@@ -301,33 +323,20 @@ def build_home():
     html += body_open(home=True)
     html += header(p, home=True)
     html += """<main id="main">
-<section class="hero">
- <canvas id="hero-canvas" aria-hidden="true"></canvas>
+<section class="hero hero-videobg">
+ <video class="hero-bg" autoplay muted loop playsinline poster="assets/hero-poster.jpg" aria-hidden="true">
+  <source src="assets/hero.mp4" type="video/mp4">
+ </video>
+ <div class="hero-shade" aria-hidden="true"></div>
  <div class="container">
-  <div class="hero-grid">
-  <div class="hero-content">
+  <div class="hero-content hero-center">
    <span class="eyebrow reveal in">Global IT Solutions Provider</span>
-   <h1 class="reveal in">Your Bridge to <span class="grad">Sri Lanka's Top Tech&nbsp;Talent</span></h1>
-   <p class="lead reveal in">Connect with pre-vetted software engineers, AI specialists, and full-stack developers at 40-70%% cost savings. From startups to enterprises, build your dream team with Via Codos — without the recruitment overhead, the visa paperwork, or the guesswork.</p>
+   <h1 class="reveal in">Your Bridge to<br><span class="grad">Sri Lanka's Top Tech&nbsp;Talent</span></h1>
+   <p class="lead reveal in">Pre-vetted software engineers, AI specialists, and full-stack developers at 40-70%% cost savings — without the recruitment overhead or the guesswork.</p>
    <div class="hero-ctas reveal in">
     <a class="btn btn-primary" href="contact.html">Get a Free Consultation %s</a>
     <a class="btn btn-outline-light" href="services/index.html">Explore Services %s</a>
    </div>
-   <div class="hero-trust reveal in">
-    <div><b data-count="500" data-suffix="+">500+</b><span>Projects Completed</span></div>
-    <div><b data-count="200" data-suffix="+">200+</b><span>Businesses worldwide trust us</span></div>
-    <div><b data-count="100" data-suffix="+">100+</b><span>Pre-vetted engineers ready to deploy</span></div>
-   </div>
-  </div>
-  <div class="hero-media">
-   <div class="frame">
-    <img src="assets/hero-image.jpg" alt="Via Codos engineering team collaborating" onerror="this.closest('.hero-media').style.display='none'">
-   </div>
-   <div class="hero-chip">
-    <div class="icon-badge"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
-    <div><b>40-70%%</b><span>Typical cost savings</span></div>
-   </div>
-  </div>
   </div>
  </div>
  <div class="hero-scroll" aria-hidden="true"></div>
@@ -369,7 +378,7 @@ def build_home():
   <div class="section-head reveal">
    <span class="tagline">Our Services</span>
    <h2>Comprehensive IT Services</h2>
-   <p class="sub">Eleven core service lines, one accountable partner.</p>
+   <p class="sub">Fifteen service lines — flagship products, custom development, and dedicated talent.</p>
   </div>
   <div class="grid grid-3">%s</div>
   <div style="text-align:center;margin-top:48px" class="reveal">
@@ -434,9 +443,9 @@ def build_home():
 def build_services():
     p = "../"
     # overview
-    groups = [("Build", "What we design and engineer from the ground up."),
-              ("Run & Scale", "What keeps your systems reliable, tested, and informed as you grow."),
-              ("Talent & Intelligence", "The people and the AI that extend your team's capacity.")]
+    groups = [("Talent & Products", "Dedicated engineering talent and the flagship products we build and run."),
+              ("Custom Development", "What we design and engineer from the ground up, around your workflow."),
+              ("Run & Scale", "What keeps your systems reliable, tested, secure, and informed as you grow.")]
     sections = ""
     for gname, gdesc in groups:
         cards = ""
@@ -452,7 +461,7 @@ def build_services():
     html += body_open() + header(p)
     html += page_hero(p, [("Services", "index.html")], "Our Services",
                       "Comprehensive IT Solutions",
-                      "From custom development to AI-powered automation, we deliver enterprise-grade solutions that drive growth, efficiency, and innovation — eleven service lines, one accountable partner.")
+                      "From custom development to AI-powered automation, we deliver enterprise-grade solutions that drive growth, efficiency, and innovation — fifteen service lines, one accountable partner.")
     html += '<main id="main"><section class="section" style="padding-top:70px"><div class="container">%s</div></section>%s</main>' % (
         sections, cta_band(p, "Need a custom solution?", "Let's discuss your requirements — no obligation, just expert advice.", "Talk to Us"))
     html += footer(p)
@@ -462,7 +471,24 @@ def build_services():
         related = [x for x in SERVICES if x["group"] == s["group"] and x["slug"] != s["slug"]][:3]
         rel_html = "".join('<a href="%s.html">%s %s</a>' % (r["slug"], r["name"], I["chevr"]) for r in related)
         paras = "".join("<p>%s</p>" % b for b in s["body"])
+        if s.get("video"):
+            paras = video_block(s["name"].split(" \u2014")[0].split(" — ")[0], s["poster"], s["video"], "../") + paras
         inc = "".join("<li>%s</li>" % x for x in s["included"])
+        extra = ""
+        if s.get("disciplines"):
+            dcards = "".join("""<div class="card disc-card reveal" data-delay="%d">
+ <div class="icon-badge">%s</div><div><h3>%s</h3><p>%s</p></div></div>""" % (
+                n % 3 + 1, I[ic], t, ds) for n, (ic, t, ds) in enumerate(s["disciplines"]))
+            lcards = "".join("""<div class="card level-card reveal" data-delay="%d">
+ <div class="icon-badge">%s</div><h3>%s <span class="yrs">%s</span></h3><p>%s</p></div>""" % (
+                n + 1, I[ic], t, y, ds) for n, (ic, t, y, ds) in enumerate(s["levels"]))
+            extra = """<section class="section section-alt"><div class="container">
+ <div class="section-head center reveal"><span class="tagline">Coverage</span>
+  <h2>Every Discipline. Every Level. One Partner.</h2>
+  <p class="sub">Nine engineering disciplines, three experience tiers — assembled around your roadmap.</p></div>
+ <div class="grid grid-3 disc-grid">%s</div>
+ <div class="grid grid-3 level-grid" style="margin-top:28px">%s</div>
+</div></section>""" % (dcards, lcards)
         html = head(s["meta_title"], s["meta_desc"], p)
         html += body_open() + header(p)
         html += page_hero(p, [("Services", "index.html"), (s["name"], "#")], s["tagline"], s["name"], s["oneliner"])
@@ -477,7 +503,7 @@ def build_services():
   <a class="btn btn-primary" href="%scontact.html">Get a Free Consultation %s</a>
   <div class="aside-links"><h5>Related services</h5>%s</div>
  </aside>
-</div></section>%s</main>""" % (paras, inc, s["stat"][0], s["stat"][1], p, I["arrow"], rel_html, cta_band(p))
+</div></section>%s%s</main>""" % (paras, inc, s["stat"][0], s["stat"][1], p, I["arrow"], rel_html, extra, cta_band(p))
         html += footer(p)
         write("services/%s.html" % s["slug"], html)
 
@@ -605,6 +631,31 @@ def build_why():
     html += footer(p)
     write("why/our-promise.html", html)
 
+def build_feedback():
+    p = "../"
+    star = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>'
+    rows = ""
+    for n, f in enumerate(FEEDBACK):
+        initials = "".join(w[0] for w in f["name"].split()[:2])
+        meta = " · ".join(x for x in [f["role"], f["company"], f["country"]] if x)
+        rows += """<article class="fb-item reveal">
+ <div class="t-photo"><span>%s</span><img src="../assets/%s" alt="%s" loading="lazy" onerror="this.style.display='none'"></div>
+ <div class="stars" aria-label="5 out of 5 stars">%s</div>
+ <p class="fb-quote">&ldquo;%s&rdquo;</p>
+ <div class="fb-name"><b>%s</b><small>%s</small></div>
+</article>""" % (initials, f["img"], f["name"], star * 5, f["quote"], f["name"], meta)
+    html = head("Client Feedback | Via Codos",
+                "What clients across Canada, the USA, Australia, Europe, and Asia say about working with Via Codos.", p)
+    html += body_open() + header(p)
+    html += page_hero(p, [("Why Via Codos", "why-us.html"), ("Client Feedback", "#")], "Client Feedback",
+                      "Trusted Across Six Time Zones",
+                      "From aircraft manufacturers in Canada to logistics operators in the USA — what it's actually like to work with us, in our clients' own words.")
+    html += '<main id="main"><section class="section"><div class="container"><div class="fb-list">%s</div></div></section>%s</main>' % (
+        rows, cta_band(p, "Ready to write the next one?",
+                        "Get started with a free consultation — no obligation, just expert advice.", "Get a Free Consultation"))
+    html += footer(p)
+    write("why/feedback.html", html)
+
 # ----------------------------------------------------------------- COMPANY
 def build_company():
     p = "../"
@@ -652,9 +703,9 @@ def build_company():
     for n, t in enumerate(TEAM):
         initials = "".join(w[0] for w in t["name"].split()[:2])
         cards += """<div class="card team-card reveal" data-delay="%d">
- <div class="team-photo">%s</div>
+ <div class="team-photo"><span>%s</span><img src="../assets/%s" alt="%s" loading="lazy" onerror="this.style.display='none'"></div>
  <span class="team-role">%s</span><h3>%s</h3><p>%s</p></div>""" % (
-            n + 1, initials, t["role"], t["name"], t["bio"])
+            n + 1, initials, t["img"], t["name"], t["role"], t["name"], t["bio"])
     html = head("Our Team | Via Codos Leadership",
                 "Meet the leadership team behind Via Codos — experts in strategic leadership, full-stack engineering, AI, and global talent acquisition.", p)
     html += body_open() + header(p)
@@ -733,22 +784,7 @@ def build_portfolio():
         html = head(c["meta_title"], c["meta_desc"], p)
         html += body_open() + header(p)
         html += page_hero(p, [("Portfolio", "index.html"), (c["name"], "#")], c["sector"], c["name"], c["headline"])
-        video_block = """<div class="video-wrap reveal">
-   <span class="video-badge">%s — product tour</span>
-   <video controls preload="metadata" playsinline poster="../assets/%s">
-    <source src="../assets/%s" type="video/mp4">
-    Your browser does not support the video tag.
-   </video>
-   <div class="video-end" hidden>
-    <h4>Like what you saw?</h4>
-    <p class="ve-sub">Let's talk about building the same operational clarity for your business.</p>
-    <div class="ve-contacts">
-     <a href="%s" target="_blank" rel="noopener">%s +94 721 980 060</a>
-     <a href="mailto:info@viacodos.com">%s info@viacodos.com</a>
-    </div>
-    <button class="ve-replay" type="button">Watch again</button>
-   </div>
-  </div>""" % (c["name"], c["poster"], c["video"], WA_LINK, I["wa"], I["mail"])
+        vb = video_block(c["name"], c["poster"], c["video"], "../")
         html += """<main id="main">
 <section class="section"><div class="container detail-layout">
  <div class="prose reveal">
@@ -770,7 +806,7 @@ def build_portfolio():
  <div class="section-head center reveal"><span class="tagline">Results &amp; Impact</span><h2>What Changed</h2></div>
  <div class="stats-grid">%s</div>
 </div></section>
-%s</main>""" % (video_block, c["client"], c["challenge"], c["solution"],
+%s</main>""" % (vb, c["client"], c["challenge"], c["solution"],
                 impl, c["quote"], c["results"][0][0], c["results"][0][1], p, I["arrow"], res,
                 cta_band(p, "Interested in similar results for your business?",
                          "Tell us your operational problem — we'll show you what a purpose-built solution looks like.", "Start a Conversation"))
@@ -837,8 +873,6 @@ def build_contact():
    <div><b>Email</b><a href="mailto:info@viacodos.com">info@viacodos.com</a></div></div>
   <div class="contact-item"><div class="icon-badge">%s</div>
    <div><b>WhatsApp</b><a href="%s" target="_blank" rel="noopener">+94 721 980 060</a></div></div>
-  <div class="contact-item"><div class="icon-badge">%s</div>
-   <div><b>Phone (US)</b><a href="tel:+18559543778">(855) 954-3778</a></div></div>
   <div class="contact-item" style="border-bottom:none"><div class="icon-badge">%s</div>
    <div><b>Office</b><span>Galle, Ginthota, Sri Lanka</span></div></div>
   <a class="btn btn-primary" style="margin-top:26px" href="%s" target="_blank" rel="noopener">Get Started Today %s</a>
@@ -860,7 +894,7 @@ def build_contact():
    <textarea id="f-message" name="message" required placeholder="Tell us what you're trying to build, fix, or scale…"></textarea></div>
   <button class="btn btn-primary" type="submit" style="width:100%%;justify-content:center">Send Message %s</button>
  </form>
-</div></section></main>""" % (I["mail"], I["wa"], WA_LINK, I["phone"], I["pin"], WA_LINK, I["arrow"], opts, I["arrow"])
+</div></section></main>""" % (I["mail"], I["wa"], WA_LINK, I["pin"], WA_LINK, I["arrow"], opts, I["arrow"])
     html += footer(p)
     write("contact.html", html)
 
@@ -1021,8 +1055,15 @@ qalam.mp4                       portfolio/qalam-mms.html
 realtor-grow.mp4                portfolio/realtor-grow.html
 ai-call-colleague.mp4           portfolio/ai-call-colleague.html
 
+hero.mp4                        Homepage hero background (in place)
+hero-poster.jpg                 Optional poster frame for the hero video
+
+PEOPLE PHOTOS (square, ~600x600, JPG)
+team_1.jpg .. team_4.jpg        Team page (Aadil, Aabid, Hiruna, Sachintha)
+client_1.jpg .. client_6.jpg    Feedback page (Fayazil, Sachin, Mohamed, Marie, Abdul, Mackhem)
+
 Already in place: logo.png (transparent, generated from your logo.jpeg).
-No team photos needed — the team page uses monogram medallions by design.
+All photos fall back to elegant monogram medallions until you add them.
 """
     full = os.path.join(OUT, "assets", "IMAGES-README.txt")
     os.makedirs(os.path.dirname(full), exist_ok=True)
@@ -1037,6 +1078,7 @@ if __name__ == "__main__":
     build_services()
     build_industries()
     build_why()
+    build_feedback()
     build_company()
     build_portfolio()
     build_insights()

@@ -11,11 +11,11 @@
 
   /* ---------- Header state ---------- */
   var header = document.querySelector('.header');
-  var isHome = document.body.classList.contains('page-home');
+  var darkTop = document.body.classList.contains('page-home') || document.querySelector('.page-hero');
   function setHeader() {
     if (!header) return;
     var past = window.scrollY > 40;
-    if (isHome) {
+    if (darkTop) {
       header.classList.toggle('solid', past);
       header.classList.toggle('on-dark', !past);
     } else {
@@ -112,6 +112,24 @@
         scrollTrigger: { trigger: im, start: 'top bottom', end: 'bottom top', scrub: 0.8 }
       });
     });
+    /* landing page: dark bands rise in like a curtain (Emerald-style) */
+    if (document.body.classList.contains('page-home')) {
+      gsap.utils.toArray('main .band-dark').forEach(function (band) {
+        gsap.fromTo(band,
+          { scale: 0.965, borderRadius: '30px', opacity: 0.85 },
+          {
+            scale: 1, borderRadius: '0px', opacity: 1, ease: 'none',
+            scrollTrigger: { trigger: band, start: 'top 96%', end: 'top 42%', scrub: 0.45 }
+          });
+      });
+      /* light section headers drift slower than the page (depth) */
+      gsap.utils.toArray('.section .section-head').forEach(function (sh) {
+        gsap.to(sh, {
+          y: -22, ease: 'none',
+          scrollTrigger: { trigger: sh.parentElement, start: 'top bottom', end: 'bottom top', scrub: 0.9 }
+        });
+      });
+    }
   } else if ('IntersectionObserver' in window && !reduceMotion) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
@@ -170,6 +188,27 @@
       }, { passive: true });
       para();
     }
+  }
+
+  /* ---------- Sub-page hero: mouse-parallax orbs ---------- */
+  var ph = document.querySelector('.page-hero');
+  if (ph && !reduceMotion && window.matchMedia('(hover: hover)').matches) {
+    var orbs = ph.querySelectorAll('.ph-orb, .ph-ring');
+    var phTick = false;
+    ph.addEventListener('mousemove', function (e) {
+      if (phTick) return;
+      phTick = true;
+      requestAnimationFrame(function () {
+        var r = ph.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width - 0.5;
+        var y = (e.clientY - r.top) / r.height - 0.5;
+        orbs.forEach(function (o, i) {
+          var s = (i + 1) * 16;
+          o.style.transform = 'translate(' + (x * s).toFixed(1) + 'px,' + (y * s).toFixed(1) + 'px)';
+        });
+        phTick = false;
+      });
+    });
   }
 
   /* ---------- Project videos: contact end-card ---------- */

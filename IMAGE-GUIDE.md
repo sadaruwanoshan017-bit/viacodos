@@ -64,3 +64,24 @@ you don't need to edit that into the video files themselves.
 ## Already done for you
 - `logo.png` — transparent-background version generated from your `logo.jpeg` (used in the navbar and footer)
 - Team page — uses monogram medallions, no photos needed
+
+
+---
+
+## People photos (added later — square crop, ~600 × 600 px, JPG)
+All show an elegant monogram medallion until the file exists.
+
+| File | Who | Where |
+|---|---|---|
+| `team_1.jpg` | Aadil Rizam | Team page |
+| `team_2.jpg` | Aabid Rizam | Team page |
+| `team_3.jpg` | Hiruna Weerakoon | Team page |
+| `team_4.jpg` | Sachintha Fernando | Team page |
+| `client_1.jpg` | Fayazil Fahim (Bombardier, Canada) | Client Feedback page |
+| `client_2.jpg` | Sachin K. Deshan (Karloose Logistics, USA) | Client Feedback page |
+| `client_3.jpg` | Mohamed Haleem (Haleem Lanka Travels) | Client Feedback page |
+| `client_4.jpg` | Marie Andrea Vernex (France) | Client Feedback page |
+| `client_5.jpg` | Abdul Majeed (The Address Jewellery) | Client Feedback page |
+| `client_6.jpg` | Mackhem Shean (SandleTech, Australia) | Client Feedback page |
+
+Tip: use tight head-and-shoulders crops with the face centred — they render in circles.
