@@ -1,0 +1,11 @@
+# Python cache from the page generator
+_generator/__pycache__/
+*.pyc
+
+# OS junk
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# original unprocessed logo (logo.png is the one the site uses)
+assets/logo.jpeg
